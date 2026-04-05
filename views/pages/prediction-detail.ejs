@@ -1,0 +1,33 @@
+<%- include('../partials/head') %>
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>'); --bg-left:url('<%= site.backgroundLeft %>'); --bg-right:url('<%= site.backgroundRight %>');">
+  <%- include('../partials/header') %>
+  <main class="container inner-page glass detail-block center-detail">
+    <a href="/prediksi" class="back-link">&larr; Beranda Prediksi</a>
+    <h1><%= site.siteName %> Prediksi <%= market.name %> Hari: <%= current ? current.date : '-' %></h1>
+    <img src="<%= market.logoUrl %>" alt="<%= market.name %>" class="detail-logo" />
+    <% if (current) { %>
+      <div class="prediction-detail-list">
+        <div class="detail-row"><span>Angka Main</span><strong>( <%= current.angkaMain %> )</strong></div>
+        <div class="detail-row"><span>Top 4D (BB)</span><strong><%= current.top4d %></strong></div>
+        <div class="detail-row"><span>Top 3D (BB)</span><strong><%= current.top3d %></strong></div>
+        <div class="detail-row"><span>Top 2D (BB)</span><strong><%= current.top2d %></strong></div>
+        <div class="detail-row"><span>Colok Bebas</span><strong><%= current.colokBebas %></strong></div>
+        <div class="detail-row"><span>Colok 2D</span><strong><%= current.colok2d %></strong></div>
+        <div class="detail-row"><span>Shio Jitu</span><strong><%= current.shio %></strong></div>
+      </div>
+    <% } %>
+    <section class="history-strip">
+      <h2>Prediksi Sebelumnya</h2>
+      <div class="history-cards">
+        <% history.forEach(function(item){ %>
+          <div class="history-card glass">
+            <div><%= item.date %></div>
+            <strong><%= item.angkaMain %></strong>
+            <small><%= item.shio %></small>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>
+</div>

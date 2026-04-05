@@ -1,0 +1,30 @@
+<%- include('../partials/head') %>
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>'); --bg-left:url('<%= site.backgroundLeft %>'); --bg-right:url('<%= site.backgroundRight %>');">
+  <%- include('../partials/header') %>
+  <main class="container inner-page glass page-block">
+    <h1>Result Lengkap <%= market.name %></h1>
+    <div class="table-wrap">
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Hari</th>
+            <th>Tanggal</th>
+            <th>Prize 1</th>
+            <th>Jam Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% history.forEach(function(item){ %>
+            <tr>
+              <td><%= item.dayName %></td>
+              <td><%= item.date %></td>
+              <td class="big-num"><%= item.prize1 %></td>
+              <td><%= item.resultTime %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</div>

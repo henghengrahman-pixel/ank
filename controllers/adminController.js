@@ -1,0 +1,151 @@
+const { getSettings, saveSettings, getSliders, saveSliders, getMarkets, saveMarkets, getAdmins, saveAdmins, getPredictionFile, readJson, writeJson } = require('../helpers/data');
+const { getLatestResultByMarket, getResultHistoryByMarket, saveDailyResult } = require('../helpers/results');
+const { getTodayWIBDate } = require('../helpers/time');
+
+function loginPage(req, res) {
+  if (req.session.admin) return res.redirect('/admin');
+  res.render('admin/login', { pageTitle: 'Admin Login', settings: getSettings(), error: null });
+}
+
+function login(req, res) {
+  const { adminId, adminPassword } = req.body;
+  const extraAdmins = getAdmins();
+  const envMatch = adminId === process.env.ADMIN_ID && adminPassword === process.env.ADMIN_PASSWORD;
+  const extraMatch = extraAdmins.some((item) => item.adminId === adminId && item.adminPassword === adminPassword);
+
+  if (!envMatch && !extraMatch) {
+    return res.status(401).render('admin/login', { pageTitle: 'Admin Login', settings: getSettings(), error: 'ID atau password salah.' });
+  }
+
+  req.session.admin = { adminId, source: envMatch ? 'env' : 'json' };
+  res.redirect('/admin');
+}
+
+function logout(req, res) {
+  req.session.destroy(() => res.redirect('/admin/login'));
+}
+
+function dashboard(req, res) {
+  const markets = getMarkets();
+  const stats = {
+    totalMarkets: markets.length,
+    totalSliders: getSliders().length,
+    totalAdmins: getAdmins().length + 1,
+    latestDate: getTodayWIBDate()
+  };
+  res.render('admin/dashboard', { pageTitle: 'Admin Dashboard', settings: getSettings(), stats, markets, getLatestResultByMarket });
+}
+
+function settingsPage(req, res) {
+  res.render('admin/settings', { pageTitle: 'Web Settings', settings: getSettings() });
+}
+
+function saveSettingsPage(req, res) {
+  const current = getSettings();
+  saveSettings({ ...current, ...req.body });
+  res.redirect('/admin/settings');
+}
+
+function slidersPage(req, res) {
+  res.render('admin/sliders', { pageTitle: 'Slider Banner', settings: getSettings(), sliders: getSliders() });
+}
+
+function saveSlidersPage(req, res) {
+  const sliders = getSliders();
+  const { action, id, imageUrl, title } = req.body;
+  if (action === 'create') sliders.unshift({ id: `s-${Date.now()}`, imageUrl, title, active: true });
+  if (action === 'update') {
+    const index = sliders.findIndex((item) => item.id === id);
+    if (index >= 0) sliders[index] = { ...sliders[index], imageUrl, title };
+  }
+  if (action === 'delete') {
+    saveSliders(sliders.filter((item) => item.id !== id));
+    return res.redirect('/admin/sliders');
+  }
+  saveSliders(sliders);
+  res.redirect('/admin/sliders');
+}
+
+function marketsPage(req, res) {
+  res.render('admin/markets', { pageTitle: 'Daftar Pasaran', settings: getSettings(), markets: getMarkets() });
+}
+
+function saveMarketsPage(req, res) {
+  const markets = getMarkets();
+  const { action, id, name, slug, liveDrawLink, logoUrl, closeTime, resultTime, description } = req.body;
+  if (action === 'create') markets.unshift({ id: `m-${Date.now()}`, name, slug, liveDrawLink, logoUrl, closeTime, resultTime, description });
+  if (action === 'update') {
+    const index = markets.findIndex((item) => item.id === id);
+    if (index >= 0) markets[index] = { ...markets[index], name, slug, liveDrawLink, logoUrl, closeTime, resultTime, description };
+  }
+  if (action === 'delete') {
+    saveMarkets(markets.filter((item) => item.id !== id));
+    return res.redirect('/admin/markets');
+  }
+  saveMarkets(markets);
+  res.redirect('/admin/markets');
+}
+
+function resultsPage(req, res) {
+  const markets = getMarkets().map((market) => ({ ...market, history: getResultHistoryByMarket(market.slug) }));
+  res.render('admin/results', { pageTitle: 'Result Pasaran', settings: getSettings(), markets, today: getTodayWIBDate() });
+}
+
+function saveResultsPage(req, res) {
+  const { slug, date, prize1, resultTime } = req.body;
+  saveDailyResult(slug, { date, prize1, resultTime });
+  res.redirect('/admin/results');
+}
+
+function predictionsPage(req, res) {
+  const markets = getMarkets().map((market) => ({
+    ...market,
+    predictionPayload: readJson(getPredictionFile(market.slug), { current: null, history: [] })
+  }));
+  res.render('admin/predictions', { pageTitle: 'Prediksi', settings: getSettings(), markets, today: getTodayWIBDate() });
+}
+
+function savePredictionsPage(req, res) {
+  const { slug, angkaMain, top4d, top3d, top2d, colokBebas, colok2d, shio } = req.body;
+  const file = getPredictionFile(slug);
+  const payload = readJson(file, { current: null, history: [] });
+  if (payload.current && payload.current.date !== getTodayWIBDate()) payload.history.unshift(payload.current);
+  payload.current = { date: getTodayWIBDate(), angkaMain, top4d, top3d, top2d, colokBebas, colok2d, shio, createdAt: new Date().toISOString() };
+  writeJson(file, payload);
+  res.redirect('/admin/predictions');
+}
+
+function adminsPage(req, res) {
+  res.render('admin/admins', { pageTitle: 'Tambah Admin', settings: getSettings(), admins: getAdmins() });
+}
+
+function saveAdminsPage(req, res) {
+  const admins = getAdmins();
+  const { action, id, adminId, adminPassword } = req.body;
+  if (action === 'create') admins.unshift({ id: `a-${Date.now()}`, adminId, adminPassword });
+  if (action === 'delete') {
+    saveAdmins(admins.filter((item) => item.id !== id));
+    return res.redirect('/admin/admins');
+  }
+  saveAdmins(admins);
+  res.redirect('/admin/admins');
+}
+
+module.exports = {
+  loginPage,
+  login,
+  logout,
+  dashboard,
+  settingsPage,
+  saveSettingsPage,
+  slidersPage,
+  saveSlidersPage,
+  marketsPage,
+  saveMarketsPage,
+  resultsPage,
+  saveResultsPage,
+  predictionsPage,
+  savePredictionsPage,
+  adminsPage,
+  saveAdminsPage
+};

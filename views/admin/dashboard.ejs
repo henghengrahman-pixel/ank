@@ -1,0 +1,26 @@
+<%- include('../partials/head') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-nav') %>
+  <main class="admin-main">
+    <section class="admin-section">
+      <h1>Dashboard</h1>
+      <div class="admin-stats">
+        <div class="stat-card glass"><span>Total Pasaran</span><strong><%= stats.totalMarkets %></strong></div>
+        <div class="stat-card glass"><span>Total Slider</span><strong><%= stats.totalSliders %></strong></div>
+        <div class="stat-card glass"><span>Total Admin</span><strong><%= stats.totalAdmins %></strong></div>
+        <div class="stat-card glass"><span>Tanggal WIB</span><strong><%= stats.latestDate %></strong></div>
+      </div>
+      <div class="admin-table glass">
+        <table>
+          <thead><tr><th>Pasaran</th><th>Result Terakhir</th><th>Jam Result</th></tr></thead>
+          <tbody>
+            <% markets.forEach(function(market){ const latest = getLatestResultByMarket(market.slug); %>
+              <tr><td><%= market.name %></td><td><%= latest ? latest.prize1 : '-' %></td><td><%= market.resultTime %></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>

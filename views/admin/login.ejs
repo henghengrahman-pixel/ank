@@ -1,0 +1,11 @@
+<%- include('../partials/head') %>
+<div class="admin-login-shell">
+  <form class="admin-login glass" action="/admin/login" method="POST">
+    <h1>Admin Login</h1>
+    <% if (error) { %><div class="alert"><%= error %></div><% } %>
+    <label>ID Admin<input type="text" name="adminId" required /></label>
+    <label>Password<input type="password" name="adminPassword" required /></label>
+    <button class="action-btn wide" type="submit">Masuk</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

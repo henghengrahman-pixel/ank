@@ -1,0 +1,32 @@
+<%- include('../partials/head') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-nav') %>
+  <main class="admin-main">
+    <section class="admin-section glass">
+      <h1>Result Pasaran</h1>
+      <% markets.forEach(function(market){ %>
+        <div class="admin-block glass">
+          <h2><%= market.name %></h2>
+          <form method="POST" action="/admin/results" class="admin-form inline-form">
+            <input type="hidden" name="slug" value="<%= market.slug %>" />
+            <input type="date" name="date" value="<%= today %>" required />
+            <input name="prize1" maxlength="4" placeholder="1234" required />
+            <input name="resultTime" value="<%= market.resultTime %>" placeholder="Jam Result" />
+            <button class="action-btn" type="submit">Simpan Result</button>
+          </form>
+          <div class="admin-table">
+            <table>
+              <thead><tr><th>Hari</th><th>Tanggal</th><th>Prize 1</th><th>Jam</th></tr></thead>
+              <tbody>
+                <% market.history.forEach(function(item){ %>
+                  <tr><td><%= item.dayName %></td><td><%= item.date %></td><td><%= item.prize1 %></td><td><%= item.resultTime %></td></tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% }) %>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>
