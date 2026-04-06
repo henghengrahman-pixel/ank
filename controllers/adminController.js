@@ -73,20 +73,18 @@ function logout(req, res) {
 }
 
 function dashboard(req, res) {
-  const markets = getMarkets();
-  const stats = {
-    totalMarkets: markets.length,
-    totalSliders: getSliders().length,
-    totalAdmins: getAdmins().length + 1,
-    latestDate: getTodayWIBDate()
-  };
+  const sliders = getSliders();
+  const markets = getMarkets().map((market) => ({
+    ...market,
+    latestResult: getLatestResultByMarket(market.slug)
+  }));
 
   res.render('admin/dashboard', {
-    pageTitle: 'Admin Dashboard',
+    pageTitle: 'Dashboard',
     settings: getSettings(),
-    stats,
+    sliders,
     markets,
-    getLatestResultByMarket
+    today: getTodayWIBDate()
   });
 }
 
@@ -99,6 +97,7 @@ function settingsPage(req, res) {
 
 function saveSettingsPage(req, res) {
   const current = getSettings();
+
   saveSettings({
     ...current,
     ...req.body
