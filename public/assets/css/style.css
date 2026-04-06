@@ -1186,3 +1186,43 @@ header.glass {
   border: none !important;
   backdrop-filter: none !important;
 }
+
+/* DETAIL PREDIKSI CLEAN */
+.prediction-detail-clean {
+  margin-top: 20px;
+  text-align: center;
+  padding: 25px;
+}
+
+.prediction-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-logo-center {
+  width: 120px;
+  height: 70px;
+  object-fit: contain;
+  margin: 10px auto 20px;
+  display: block;
+}
+
+.prediction-center {
+  max-width: 700px;
+  margin: auto;
+}
+
+.row-line {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.row-line span {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.history-title {
+  text-align: center;
+  margin-bottom: 15px;
+}
