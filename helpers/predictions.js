@@ -1,6 +1,8 @@
 const { getMarkets, getPredictionFile, readJson, writeJson } = require('./data');
 const { getTodayWIBDate } = require('./time');
 
+const SYSTEM_VERSION = 'system-v3';
+
 function seededRandom(seed) {
   const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
@@ -84,6 +86,7 @@ function generatePredictionForMarket(slug) {
     colokBebas,
     colok2d,
     shio,
+    systemVersion: SYSTEM_VERSION,
     createdAt: new Date().toISOString()
   };
 }
@@ -96,15 +99,16 @@ function ensureDailyPredictions() {
     const file = getPredictionFile(market.slug);
     const payload = readJson(file, { current: null, history: [] });
 
-    if (!payload.current) {
-      payload.current = generatePredictionForMarket(market.slug);
-      payload.history = Array.isArray(payload.history) ? payload.history.slice(0, 14) : [];
-      writeJson(file, payload);
-      continue;
-    }
+    const mustRegenerate =
+      !payload.current ||
+      payload.current.date !== today ||
+      payload.current.systemVersion !== SYSTEM_VERSION;
 
-    if (payload.current.date !== today) {
-      payload.history.unshift(payload.current);
+    if (mustRegenerate) {
+      if (payload.current && payload.current.date !== today) {
+        payload.history.unshift(payload.current);
+      }
+
       payload.current = generatePredictionForMarket(market.slug);
     }
 
