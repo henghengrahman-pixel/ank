@@ -1126,3 +1126,26 @@ header,
   box-shadow: none !important;
   border: none !important;
 }
+/* HEADER LOGO SAJA */
+.site-header-clean {
+  width: 100%;
+  text-align: center;
+  padding: 14px 0 10px;
+  background: transparent;
+}
+
+.logo-center img {
+  height: 48px;
+  object-fit: contain;
+}
+
+/* HAPUS SEMUA BACKGROUND HEADER LAMA */
+.topbar,
+.topbar-inner,
+.site-header,
+header {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
+}
