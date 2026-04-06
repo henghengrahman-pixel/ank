@@ -1,27 +1,42 @@
 <%- include('../partials/head') %>
-<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>'); --bg-left:url('<%= site.backgroundLeft %>'); --bg-right:url('<%= site.backgroundRight %>');">
+
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
   <%- include('../partials/header') %>
+
   <main class="container inner-page glass page-block">
     <div class="page-head">
       <h1>Prediksi Togel Hari Ini</h1>
+
       <select id="marketFilter" class="select-box">
         <option value="">Cari Pasaran</option>
-        <% markets.forEach(function(market){ %><option value="<%= market.slug %>"><%= market.name %></option><% }) %>
+        <% markets.forEach(function(market){ %>
+          <option value="<%= market.slug %>"><%= market.name %></option>
+        <% }) %>
       </select>
     </div>
+
     <div class="prediction-list" id="predictionList">
       <% markets.forEach(function(market){ %>
         <article class="prediction-item glass" data-slug="<%= market.slug %>">
           <img src="<%= market.logoUrl %>" alt="<%= market.name %>" />
+
           <div class="prediction-content">
             <h3>PREDIKSI TOGEL <%= market.name.toUpperCase() %> <%= today %></h3>
             <p><strong>Pasaran:</strong> <%= market.name %></p>
-            <p><%= market.description %></p>
+
+            <% if (market.prediction) { %>
+              <p><strong>Angka Main:</strong> <%= market.prediction.angkaMain %></p>
+              <p><strong>Shio:</strong> <%= market.prediction.shio %></p>
+            <% } else { %>
+              <p>Prediksi belum tersedia.</p>
+            <% } %>
           </div>
+
           <a href="/prediksi/<%= market.slug %>" class="action-btn small">Lihat Prediksi</a>
         </article>
       <% }) %>
     </div>
   </main>
+
   <%- include('../partials/footer') %>
 </div>
