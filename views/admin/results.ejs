@@ -1,32 +1,95 @@
 <%- include('../partials/head') %>
+
 <div class="admin-layout">
   <%- include('../partials/admin-nav') %>
+
   <main class="admin-main">
     <section class="admin-section glass">
       <h1>Result Pasaran</h1>
-      <% markets.forEach(function(market){ %>
-        <div class="admin-block glass">
-          <h2><%= market.name %></h2>
-          <form method="POST" action="/admin/results" class="admin-form inline-form">
-            <input type="hidden" name="slug" value="<%= market.slug %>" />
-            <input type="date" name="date" value="<%= today %>" required />
-            <input name="prize1" maxlength="4" placeholder="1234" required />
-            <input name="resultTime" value="<%= market.resultTime %>" placeholder="Jam Result" />
-            <button class="action-btn" type="submit">Simpan Result</button>
-          </form>
-          <div class="admin-table">
-            <table>
-              <thead><tr><th>Hari</th><th>Tanggal</th><th>Prize 1</th><th>Jam</th></tr></thead>
-              <tbody>
-                <% market.history.forEach(function(item){ %>
-                  <tr><td><%= item.dayName %></td><td><%= item.date %></td><td><%= item.prize1 %></td><td><%= item.resultTime %></td></tr>
-                <% }) %>
-              </tbody>
-            </table>
+
+      <div class="result-admin-list">
+        <% markets.forEach(function(market){ %>
+          <div class="result-admin-row glass">
+            <div class="result-admin-market">
+              <img
+                src="<%= market.logoUrl || 'https://dummyimage.com/80x40/111/fff&text=LOGO' %>"
+                alt="<%= market.name %>"
+                class="result-admin-logo"
+              />
+              <div class="result-admin-name"><%= market.name %></div>
+            </div>
+
+            <form method="POST" action="/admin/results" class="result-admin-form">
+              <input type="hidden" name="slug" value="<%= market.slug %>" />
+
+              <div class="result-admin-input">
+                <input
+                  type="text"
+                  name="prize1"
+                  maxlength="4"
+                  placeholder="xxxx"
+                  value="<%= market.currentResult ? market.currentResult.prize1 : '' %>"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-date">
+                <input
+                  type="date"
+                  name="date"
+                  value="<%= market.currentResult ? market.currentResult.date : today %>"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-time">
+                <input
+                  type="text"
+                  name="resultTime"
+                  value="<%= market.currentResult ? market.currentResult.resultTime : (market.resultTime || '') %>"
+                  placeholder="03:00"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-action">
+                <button class="action-btn" type="submit">Simpan Result</button>
+              </div>
+            </form>
+
+            <div class="admin-table result-history-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Hari</th>
+                    <th>Tanggal</th>
+                    <th>Prize 1</th>
+                    <th>Jam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (market.history && market.history.length) { %>
+                    <% market.history.forEach(function(item){ %>
+                      <tr>
+                        <td><%= item.dayName %></td>
+                        <td><%= item.date %></td>
+                        <td><strong><%= item.prize1 %></strong></td>
+                        <td><%= item.resultTime %></td>
+                      </tr>
+                    <% }) %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="4">Belum ada history.</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      <% }) %>
+        <% }) %>
+      </div>
     </section>
   </main>
 </div>
+
 <%- include('../partials/footer') %>
