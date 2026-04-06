@@ -4,31 +4,40 @@
   <%- include('../partials/header') %>
 
   <main class="container main-content">
-    <section class="hero glass home-hero-box">
-      <div class="slider-wrap">
-        <div class="slider" data-slider>
-          <% sliders.forEach(function(slide, index){ %>
-            <div class="slide <%= index === 0 ? 'active' : '' %>">
-              <img src="<%= slide.imageUrl %>" alt="<%= slide.title %>" />
-            </div>
-          <% }) %>
-        </div>
+
+    <!-- HERO WD STYLE -->
+    <section class="hero-modern">
+
+      <!-- SLIDER -->
+      <div class="hero-banner">
+        <% sliders.forEach(function(slide, index){ %>
+          <img 
+            src="<%= slide.imageUrl %>" 
+            alt="<%= slide.title %>" 
+            class="<%= index === 0 ? 'active' : '' %>"
+          />
+        <% }) %>
       </div>
 
-      <div class="home-cta-row">
-        <a href="<%= site.loginLink %>" class="big-btn">LOGIN</a>
-        <a href="<%= site.registerLink %>" class="big-btn secondary">DAFTAR</a>
-        <a href="/prediksi" class="big-btn accent">PREDIKSI</a>
+      <!-- BUTTON -->
+      <div class="hero-buttons">
+        <a href="<%= site.registerLink %>" class="btn gold">DAFTAR</a>
+        <a href="<%= site.loginLink %>" class="btn dark">LOGIN</a>
+        <a href="/prediksi" class="btn dark">PREDIKSI</a>
       </div>
+
     </section>
 
+    <!-- RESULT -->
     <section class="market-grid-section">
-      <div class="section-title">Live Result Pasaran</div>
+      <div class="section-title">LIVE RESULT PASARAN</div>
 
       <div class="market-grid">
         <% markets.forEach(function(market){ %>
-          <article class="market-card glass">
+          <article class="market-card">
+
             <img class="market-logo" src="<%= market.logoUrl %>" alt="<%= market.name %>" />
+
             <h3><%= market.name %></h3>
 
             <div class="result-box">
@@ -41,6 +50,7 @@
             </div>
 
             <div class="card-actions stacked">
+
               <button
                 class="action-btn js-livedraw"
                 type="button"
@@ -53,17 +63,21 @@
 
               <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
               <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
+
             </div>
+
           </article>
         <% }) %>
       </div>
     </section>
+
   </main>
 
+  <!-- MODAL -->
   <div class="modal" id="livedrawModal" aria-hidden="true">
     <div class="modal-overlay" data-close-modal></div>
 
-    <div class="modal-card glass">
+    <div class="modal-card">
       <button class="modal-close" type="button" data-close-modal>&times;</button>
       <img id="modalLogo" class="modal-logo" src="" alt="" />
       <h3 id="modalTitle">Livedraw</h3>
@@ -73,7 +87,7 @@
         <span>Prize #1</span>
         <strong id="modalResult"></strong>
       </div>
-      <div class="modal-footer">Hasil Result Terkakhir</div>
+      <div class="modal-footer">Hasil Result Terakhir</div>
     </div>
   </div>
 
