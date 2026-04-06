@@ -2,7 +2,7 @@ const {
   getSettings,
   getSliders,
   getMarkets,
-  getPredictionFile,
+  getPredictionsFile,
   readJson
 } = require('../helpers/data');
 
@@ -12,6 +12,13 @@ const {
 } = require('../helpers/results');
 
 const { formatDisplayDate, getTodayWIBDate } = require('../helpers/time');
+
+function getPredictionsMap() {
+  const payload = readJson(getPredictionsFile(), { markets: {} });
+  return payload && payload.markets && typeof payload.markets === 'object'
+    ? payload.markets
+    : {};
+}
 
 function buildHomeMarkets() {
   return getMarkets().map((market) => ({
@@ -34,11 +41,13 @@ function home(req, res) {
 }
 
 function predictions(req, res) {
+  const predictionsMap = getPredictionsMap();
+
   const markets = getMarkets().map((market) => {
-    const predictionPayload = readJson(getPredictionFile(market.slug), {
+    const predictionPayload = predictionsMap[market.slug] || {
       current: null,
       history: []
-    });
+    };
 
     return {
       ...market,
@@ -65,10 +74,11 @@ function predictionDetail(req, res) {
     });
   }
 
-  const predictionPayload = readJson(getPredictionFile(market.slug), {
+  const predictionsMap = getPredictionsMap();
+  const predictionPayload = predictionsMap[market.slug] || {
     current: null,
     history: []
-  });
+  };
 
   res.render('pages/prediction-detail', {
     pageTitle: `Prediksi ${market.name}`,
