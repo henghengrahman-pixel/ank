@@ -1,7 +1,7 @@
-const { getMarkets, getPredictionFile, readJson, writeJson } = require('./data');
+const { getMarkets, getPredictionsFile, readJson, writeJson } = require('./data');
 const { getTodayWIBDate } = require('./time');
 
-const SYSTEM_VERSION = 'system-v4';
+const SYSTEM_VERSION = 'system-v5';
 
 function seededRandom(seed) {
   const x = Math.sin(seed) * 10000;
@@ -14,7 +14,7 @@ function rand(seed, max) {
 
 function slugToNumber(slug) {
   let num = 0;
-  for (let i = 0; i < slug.length; i++) {
+  for (let i = 0; i < slug.length; i += 1) {
     num += slug.charCodeAt(i) * (i + 5);
   }
   return num;
@@ -36,12 +36,13 @@ function getShio(num) {
     12: 'Kambing'
   };
 
-  let n = parseInt(num);
+  let n = parseInt(num, 10);
+  if (Number.isNaN(n)) n = 12;
   if (n === 0) n = 12;
   if (n > 12) n = n % 12;
   if (n === 0) n = 12;
 
-  return shioMap[n];
+  return shioMap[n] || 'Kambing';
 }
 
 function generatePredictionForMarket(slug) {
@@ -90,27 +91,45 @@ function generatePredictionForMarket(slug) {
 function ensureDailyPredictions() {
   const markets = getMarkets();
   const today = getTodayWIBDate();
+  const file = getPredictionsFile();
+
+  const payload = readJson(file, { markets: {} });
+
+  if (!payload.markets || typeof payload.markets !== 'object') {
+    payload.markets = {};
+  }
 
   for (const market of markets) {
-    const file = getPredictionFile(market.slug);
-    const payload = readJson(file, { current: null, history: [] });
+    const currentMarketPayload = payload.markets[market.slug] || { current: null, history: [] };
 
     const mustRegenerate =
-      !payload.current ||
-      payload.current.date !== today ||
-      payload.current.systemVersion !== SYSTEM_VERSION;
+      !currentMarketPayload.current ||
+      currentMarketPayload.current.date !== today ||
+      currentMarketPayload.current.systemVersion !== SYSTEM_VERSION;
 
     if (mustRegenerate) {
-      if (payload.current && payload.current.date !== today) {
-        payload.history.unshift(payload.current);
+      if (currentMarketPayload.current && currentMarketPayload.current.date !== today) {
+        currentMarketPayload.history.unshift(currentMarketPayload.current);
       }
 
-      payload.current = generatePredictionForMarket(market.slug);
+      currentMarketPayload.current = generatePredictionForMarket(market.slug);
     }
 
-    payload.history = payload.history.slice(0, 14);
-    writeJson(file, payload);
+    currentMarketPayload.history = Array.isArray(currentMarketPayload.history)
+      ? currentMarketPayload.history.slice(0, 14)
+      : [];
+
+    payload.markets[market.slug] = currentMarketPayload;
   }
+
+  const activeSlugs = new Set(markets.map((market) => market.slug));
+  Object.keys(payload.markets).forEach((slug) => {
+    if (!activeSlugs.has(slug)) {
+      delete payload.markets[slug];
+    }
+  });
+
+  writeJson(file, payload);
 }
 
 module.exports = {
