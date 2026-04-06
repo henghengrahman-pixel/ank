@@ -1,5 +1,3 @@
-Pakai file `controllers/siteController.js` ini saja, sudah fix lengkap:
-
 ```js
 const {
   getSettings,
@@ -126,6 +124,3 @@ module.exports = {
   predictionDetail,
   resultDetail
 };
-```
-
-Setelah ganti, save lalu restart/redeploy.
