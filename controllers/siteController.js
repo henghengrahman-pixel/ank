@@ -78,18 +78,36 @@ function predictionDetail(req, res) {
 
   const predictionsMap = getPredictionsMap();
   const sliders = getSliders().filter((item) => item.active !== false);
+
   const predictionPayload = predictionsMap[market.slug] || {
     current: null,
     history: []
   };
+
+  const selectedDate = req.query.date;
+
+  let current = predictionPayload.current || null;
+
+  // 🔥 FIX: klik history
+  if (selectedDate) {
+    const found = (predictionPayload.history || []).find(
+      (item) => item.date === selectedDate
+    );
+
+    if (found) {
+      current = found;
+    }
+  }
 
   res.render('pages/prediction-detail', {
     pageTitle: `Prediksi ${market.name}`,
     settings: getSettings(),
     sliders,
     market,
-    current: predictionPayload.current || null,
-    history: Array.isArray(predictionPayload.history) ? predictionPayload.history : [],
+    current,
+    history: Array.isArray(predictionPayload.history)
+      ? predictionPayload.history
+      : [],
     formatDisplayDate
   });
 }
