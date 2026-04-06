@@ -1,11 +1,22 @@
-<header class="topbar glass">
+<header class="topbar">
   <div class="container topbar-inner">
-    <a href="/" class="brand">
-      <img src="<%= site.logoUrl %>" alt="<%= site.siteName %>" />
-    </a>
-    <div class="topbar-actions">
-      <div class="promo-text"><%= site.headerPromo %></div>
-      <a class="wa-btn" href="<%= site.whatsappLink %>" target="_blank" rel="noreferrer">WhatsApp</a>
-    </div>
+
+```
+<a href="/" class="brand">
+  <img src="<%= site.logoUrl %>" alt="<%= site.siteName %>" />
+</a>
+
+<div class="topbar-center">
+  <span class="promo-text"><%= site.headerPromo %></span>
+</div>
+
+<div class="topbar-actions">
+  <a class="nav-btn" href="<%= site.loginLink %>">LOGIN</a>
+  <a class="nav-btn" href="<%= site.registerLink %>">DAFTAR</a>
+  <a class="nav-btn highlight" href="/prediksi">PREDIKSI</a>
+  <a class="wa-btn" href="<%= site.whatsappLink %>" target="_blank">WhatsApp</a>
+</div>
+```
+
   </div>
 </header>
