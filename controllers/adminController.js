@@ -1,4 +1,3 @@
-
 const {
   getSettings,
   saveSettings,
@@ -12,6 +11,7 @@ const {
 
 const {
   getLatestResultByMarket,
+  getCurrentResultByMarket,
   getResultHistoryByMarket,
   saveDailyResult
 } = require('../helpers/results');
@@ -213,14 +213,17 @@ function resultsPage(req, res) {
 
   const markets = getMarkets()
     .map((market) => {
+      const currentResult = getCurrentResultByMarket(market.slug);
       const history = getResultHistoryByMarket(market.slug);
-      const latest = Array.isArray(history) && history.length ? history[0] : null;
-      const hasTodayResult = latest && latest.date === today;
+
+      const hasTodayResult =
+        currentResult && currentResult.date === today;
 
       return {
         ...market,
-        history,
-        hasTodayResult
+        currentResult: currentResult || null,
+        history: Array.isArray(history) ? history : [],
+        hasTodayResult: !!hasTodayResult
       };
     })
     .sort((a, b) => {
