@@ -3346,3 +3346,136 @@ textarea {
 .big-btn:hover {
   opacity: 0.9;
 }
+/* =========================
+   FINAL PREMIUM FIX CLEAN
+========================= */
+
+/* HERO BALANCE */
+.home-hero-box {
+  max-width: 720px;
+  margin: 20px auto;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #141414, #0a0a0a);
+  border: 1px solid rgba(255,215,0,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* SLIDER CLEAN */
+.slide img {
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* BUTTON FIX (GA GEPENG LAGI) */
+.home-cta-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.big-btn {
+  flex: 1;
+  padding: 11px;
+  font-size: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  background: linear-gradient(180deg,#2a2a2a,#111);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: .2s;
+}
+
+/* GOLD FIX (BIAR GA NORAK) */
+.big-btn.accent {
+  background: linear-gradient(180deg,#e6b800,#a67c00);
+  color: #000;
+}
+
+.big-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* SECTION */
+.section-title {
+  margin: 28px 0 12px;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* MARKET CARD (INI YANG PALING PENTING) */
+.market-card {
+  border-radius: 16px;
+  padding: 12px;
+  background: linear-gradient(180deg,#1a1a1a,#0b0b0b);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: .25s;
+}
+
+.market-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 18px rgba(255,215,0,0.2);
+}
+
+/* LOGO FIX */
+.market-logo {
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+/* RESULT BOX (BIKIN HIDUP 🔥) */
+.result-box {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: #000;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 8px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* SHINE EFFECT HALUS */
+.result-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-20deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -120%; }
+  100% { left: 150%; }
+}
+
+/* BUTTON DALAM CARD */
+.action-btn {
+  padding: 9px;
+  font-size: 13px;
+  border-radius: 8px;
+  background: linear-gradient(180deg,#2b2b2b,#111);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: .2s;
+}
+
+.action-btn:hover {
+  background: linear-gradient(180deg,#e6b800,#a67c00);
+  color: #000;
+}
+
+/* BACKGROUND REDUCE NOISE */
+.site-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  pointer-events: none;
+}
