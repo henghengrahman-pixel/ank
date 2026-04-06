@@ -1574,3 +1574,17 @@ header.glass {
     font-size: 16px;
   }
 }
+.history-market-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-market-logo {
+  width: 48px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(255,255,255,.04);
+  padding: 2px;
+}
