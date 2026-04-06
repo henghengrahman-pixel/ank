@@ -1,26 +1,63 @@
-<%- include('../partials/head') %>
+<%- include('../partials/admin-head') %>
+
 <div class="admin-layout">
   <%- include('../partials/admin-nav') %>
+
   <main class="admin-main">
-    <section class="admin-section">
-      <h1>Dashboard</h1>
-      <div class="admin-stats">
-        <div class="stat-card glass"><span>Total Pasaran</span><strong><%= stats.totalMarkets %></strong></div>
-        <div class="stat-card glass"><span>Total Slider</span><strong><%= stats.totalSliders %></strong></div>
-        <div class="stat-card glass"><span>Total Admin</span><strong><%= stats.totalAdmins %></strong></div>
-        <div class="stat-card glass"><span>Tanggal WIB</span><strong><%= stats.latestDate %></strong></div>
+    <h1>Dashboard</h1>
+
+    <div class="admin-cards">
+      <div class="admin-card glass">
+        <div class="admin-card-title">Total Pasaran</div>
+        <div class="admin-card-value"><%= markets.length %></div>
       </div>
-      <div class="admin-table glass">
-        <table>
-          <thead><tr><th>Pasaran</th><th>Result Terakhir</th><th>Jam Result</th></tr></thead>
-          <tbody>
-            <% markets.forEach(function(market){ const latest = getLatestResultByMarket(market.slug); %>
-              <tr><td><%= market.name %></td><td><%= latest ? latest.prize1 : '-' %></td><td><%= market.resultTime %></td></tr>
-            <% }) %>
-          </tbody>
-        </table>
+
+      <div class="admin-card glass">
+        <div class="admin-card-title">Total Slider</div>
+        <div class="admin-card-value"><%= sliders.length %></div>
+      </div>
+
+      <div class="admin-card glass">
+        <div class="admin-card-title">Tanggal WIB</div>
+        <div class="admin-card-value"><%= today %></div>
+      </div>
+    </div>
+
+    <section class="admin-section glass">
+      <h2>Result Terakhir Pasaran</h2>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Pasaran</th>
+            <th>Result Terakhir</th>
+            <th>Jam Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% markets.forEach(function(market){ %>
+            <tr>
+              <td><%= market.name %></td>
+              <td>
+                <%= market.latestResult ? market.latestResult.prize1 : '----' %>
+              </td>
+              <td><%= market.resultTime || '-' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="admin-section glass">
+      <h2>Menu Cepat</h2>
+
+      <div class="admin-quick">
+        <a href="/admin/settings" class="quick-btn">Web Settings</a>
+        <a href="/admin/sliders" class="quick-btn">Slider Banner</a>
+        <a href="/admin/markets" class="quick-btn">Daftar Pasaran</a>
+        <a href="/admin/results" class="quick-btn">Result Pasaran</a>
+        <a href="/admin/admins" class="quick-btn">Tambah Admin</a>
       </div>
     </section>
   </main>
 </div>
-<%- include('../partials/footer') %>
