@@ -1118,3 +1118,11 @@ textarea {
 .topbar-actions {
   display: none;
 }
+
+header,
+.topbar,
+.site-header {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
