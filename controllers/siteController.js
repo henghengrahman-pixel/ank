@@ -1,3 +1,6 @@
+Pakai file `controllers/siteController.js` ini saja, sudah fix lengkap:
+
+```js
 const {
   getSettings,
   getSliders,
@@ -105,10 +108,12 @@ function resultDetail(req, res) {
   }
 
   const history = getResultHistoryByMarket(market.slug);
+  const sliders = getSliders().filter((item) => item.active !== false);
 
   res.render('pages/result-detail', {
     pageTitle: `Result ${market.name}`,
     settings: getSettings(),
+    sliders,
     market,
     history: Array.isArray(history) ? history : [],
     formatDisplayDate
@@ -121,3 +126,6 @@ module.exports = {
   predictionDetail,
   resultDetail
 };
+```
+
+Setelah ganti, save lalu restart/redeploy.
