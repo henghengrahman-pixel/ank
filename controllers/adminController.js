@@ -6,10 +6,7 @@ const {
   getMarkets,
   saveMarkets,
   getAdmins,
-  saveAdmins,
-  getPredictionFile,
-  readJson,
-  writeJson
+  saveAdmins
 } = require('../helpers/data');
 
 const {
@@ -102,7 +99,11 @@ function settingsPage(req, res) {
 
 function saveSettingsPage(req, res) {
   const current = getSettings();
-  saveSettings({ ...current, ...req.body });
+  saveSettings({
+    ...current,
+    ...req.body
+  });
+
   res.redirect('/admin/settings');
 }
 
@@ -223,50 +224,14 @@ function resultsPage(req, res) {
 
 function saveResultsPage(req, res) {
   const { slug, date, prize1, resultTime } = req.body;
-  saveDailyResult(slug, { date, prize1, resultTime });
-  res.redirect('/admin/results');
-}
 
-function predictionsPage(req, res) {
-  const markets = getMarkets().map((market) => ({
-    ...market,
-    predictionPayload: readJson(getPredictionFile(market.slug), {
-      current: null,
-      history: []
-    })
-  }));
-
-  res.render('admin/predictions', {
-    pageTitle: 'Prediksi',
-    settings: getSettings(),
-    markets,
-    today: getTodayWIBDate()
+  saveDailyResult(slug, {
+    date,
+    prize1,
+    resultTime
   });
-}
 
-function savePredictionsPage(req, res) {
-  const { slug, angkaMain, top4d, top3d, top2d, colokBebas, colok2d, shio } = req.body;
-  const file = getPredictionFile(slug);
-  const payload = readJson(file, { current: null, history: [] });
-
-  if (payload.current && payload.current.date !== getTodayWIBDate()) {
-    payload.history.unshift(payload.current);
-  }
-
-  payload.current = {
-    date: getTodayWIBDate(),
-    angkaMain,
-    top4d,
-    top3d,
-    top2d,
-    colokBebas,
-    colok2d,
-    shio,
-    createdAt: new Date().toISOString()
-  };
-
-  writeJson(file, payload);
-  res.redirect('/admin/predictions');
+  res.redirect('/admin/results');
 }
 
 function adminsPage(req, res) {
@@ -311,8 +276,6 @@ module.exports = {
   saveMarketsPage,
   resultsPage,
   saveResultsPage,
-  predictionsPage,
-  savePredictionsPage,
   adminsPage,
   saveAdminsPage
 };
