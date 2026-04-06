@@ -5,7 +5,6 @@
 
   <main class="container main-content">
 
-    <!-- HERO SLIDER + LOGIN -->
     <section class="hero glass home-hero-box">
       <div class="slider-wrap">
         <div class="slider" data-slider>
@@ -24,7 +23,6 @@
       </div>
     </section>
 
-    <!-- DETAIL PREDIKSI -->
     <section class="prediction-detail-clean glass">
       <a href="/prediksi" class="back-pill">← Beranda Prediksi</a>
 
@@ -36,8 +34,8 @@
       <img src="<%= market.logoUrl %>" class="detail-logo-center" />
 
       <% if (current) { %>
-
       <div class="prediction-center">
+
         <div class="row-line">
           <span>ANGKA MAIN :</span>
           <strong>( <%= current.angkaMain %> )</strong>
@@ -72,12 +70,11 @@
           <span>SHIO JITU :</span>
           <strong><%= current.shio %></strong>
         </div>
-      </div>
 
+      </div>
       <% } %>
     </section>
 
-    <!-- HISTORY -->
     <section class="history-strip glass">
       <h2 class="history-title">
         PREDIKSI <%= market.name.toUpperCase() %> SEBELUMNYA
@@ -86,12 +83,14 @@
       <div class="history-cards">
         <% if (history && history.length) { %>
           <% history.forEach(function(item){ %>
-            <div class="history-card glass">
+
+            <a href="/prediksi/<%= market.slug %>?date=<%= item.date %>" class="history-card glass">
               <img src="<%= market.logoUrl %>" />
               <div class="history-date"><%= item.date %></div>
               <strong class="history-number"><%= item.angkaMain %></strong>
               <small class="history-shio"><%= item.shio %></small>
-            </div>
+            </a>
+
           <% }) %>
         <% } else { %>
           <div class="empty-state">Belum ada history prediksi.</div>
