@@ -1,6 +1,6 @@
 const path = require('path');
 const { readJson, writeJson, ensureDir, ensureFile } = require('./fileStore');
-const { getTodayWIBDate, getDayNameIndonesia } = require('./time');
+const { getTodayWIBDate } = require('./time');
 
 function getDataDir() {
   return path.resolve(process.env.DATA_DIR || path.join(process.cwd(), 'data'));
@@ -8,6 +8,7 @@ function getDataDir() {
 
 function getPaths() {
   const base = getDataDir();
+
   return {
     base,
     settings: path.join(base, 'settings.json'),
@@ -16,7 +17,7 @@ function getPaths() {
     admins: path.join(base, 'admins.json'),
     meta: path.join(base, 'meta.json'),
     resultsDir: path.join(base, 'results'),
-    predictionsDir: path.join(base, 'predictions')
+    predictions: path.join(base, 'predictions.json')
   };
 }
 
@@ -25,7 +26,6 @@ function bootstrapData() {
 
   ensureDir(paths.base);
   ensureDir(paths.resultsDir);
-  ensureDir(paths.predictionsDir);
 
   ensureFile(paths.settings, {
     siteName: 'Dashboard Pasaran',
@@ -47,47 +47,22 @@ function bootstrapData() {
     }
   ]);
 
-  ensureFile(paths.markets, [
-    {
-      id: 'm1',
-      name: 'HONGKONG',
-      slug: 'hongkong',
-      liveDrawLink: '#',
-      logoUrl: 'https://dummyimage.com/180x90/1f2937/ffffff&text=HK',
-      closeTime: '23:00',
-      resultTime: '23:45',
-      description: 'Hongkong Pools'
-    },
-    {
-      id: 'm2',
-      name: 'SINGAPORE',
-      slug: 'singapore',
-      liveDrawLink: '#',
-      logoUrl: 'https://dummyimage.com/180x90/1f2937/ffffff&text=SGP',
-      closeTime: '17:00',
-      resultTime: '18:00',
-      description: 'Singapore Pools'
-    }
-  ]);
+  ensureFile(paths.markets, []);
 
   ensureFile(paths.admins, []);
+
   ensureFile(paths.meta, {
     lastPredictionResetDate: getTodayWIBDate(),
     lastResultResetDate: getTodayWIBDate()
   });
 
+  ensureFile(paths.predictions, {});
+
   const markets = readJson(paths.markets, []);
 
   markets.forEach((market) => {
     const resultFile = path.join(paths.resultsDir, `${market.slug}.json`);
-    const predictionFile = path.join(paths.predictionsDir, `${market.slug}.json`);
-
     ensureFile(resultFile, []);
-
-    ensureFile(predictionFile, {
-      current: null,
-      history: []
-    });
   });
 }
 
@@ -135,8 +110,8 @@ function getResultsFile(slug) {
   return path.join(getPaths().resultsDir, `${slug}.json`);
 }
 
-function getPredictionFile(slug) {
-  return path.join(getPaths().predictionsDir, `${slug}.json`);
+function getPredictionsFile() {
+  return getPaths().predictions;
 }
 
 module.exports = {
@@ -153,7 +128,7 @@ module.exports = {
   getMeta,
   saveMeta,
   getResultsFile,
-  getPredictionFile,
+  getPredictionsFile,
   readJson,
   writeJson,
   getTodayWIBDate
