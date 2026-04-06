@@ -1,8 +1,11 @@
 <%- include('../partials/head') %>
-<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>'); --bg-left:url('<%= site.backgroundLeft %>'); --bg-right:url('<%= site.backgroundRight %>');">
+
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
   <%- include('../partials/header') %>
+
   <main class="container inner-page glass page-block">
     <h1>Result Lengkap <%= market.name %></h1>
+
     <div class="table-wrap">
       <table class="result-table">
         <thead>
@@ -14,17 +17,24 @@
           </tr>
         </thead>
         <tbody>
-          <% history.forEach(function(item){ %>
+          <% if (history && history.length) { %>
+            <% history.forEach(function(item){ %>
+              <tr>
+                <td><%= item.dayName %></td>
+                <td><%= item.date %></td>
+                <td class="big-num"><%= item.prize1 %></td>
+                <td><%= item.resultTime %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
             <tr>
-              <td><%= item.dayName %></td>
-              <td><%= item.date %></td>
-              <td class="big-num"><%= item.prize1 %></td>
-              <td><%= item.resultTime %></td>
+              <td colspan="4">Belum ada result.</td>
             </tr>
-          <% }) %>
+          <% } %>
         </tbody>
       </table>
     </div>
   </main>
+
   <%- include('../partials/footer') %>
 </div>
