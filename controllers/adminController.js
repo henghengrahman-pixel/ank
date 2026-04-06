@@ -75,6 +75,7 @@ function logout(req, res) {
 
 function dashboard(req, res) {
   const sliders = getSliders();
+
   const markets = getMarkets().map((market) => ({
     ...market,
     latestResult: getLatestResultByMarket(market.slug)
@@ -211,25 +212,26 @@ function saveMarketsPage(req, res) {
 function resultsPage(req, res) {
   const today = getTodayWIBDate();
 
-  const markets = getMarkets()
-    .map((market) => {
-      const currentResult = getCurrentResultByMarket(market.slug);
-      const history = getResultHistoryByMarket(market.slug);
+  let markets = getMarkets().map((market) => {
+    const currentResult = getCurrentResultByMarket(market.slug);
+    const history = getResultHistoryByMarket(market.slug);
 
-      const hasTodayResult =
-        currentResult && currentResult.date === today;
+    const hasTodayResult =
+      currentResult && currentResult.date === today;
 
-      return {
-        ...market,
-        currentResult: currentResult || null,
-        history: Array.isArray(history) ? history : [],
-        hasTodayResult: !!hasTodayResult
-      };
-    })
-    .sort((a, b) => {
-      if (a.hasTodayResult === b.hasTodayResult) return 0;
-      return a.hasTodayResult ? 1 : -1;
-    });
+    return {
+      ...market,
+      currentResult: currentResult || null,
+      history: Array.isArray(history) ? history : [],
+      hasTodayResult: !!hasTodayResult
+    };
+  });
+
+  // Yang belum result di atas
+  markets = markets.sort((a, b) => {
+    if (a.hasTodayResult === b.hasTodayResult) return 0;
+    return a.hasTodayResult ? 1 : -1;
+  });
 
   res.render('admin/results', {
     pageTitle: 'Result Pasaran',
