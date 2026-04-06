@@ -1,68 +1,79 @@
 <%- include('../partials/head') %>
 
-<div class="site-shell">
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
   <%- include('../partials/header') %>
 
   <main class="container main-content">
-
-    <section class="hero-modern">
-      <div class="hero-banner">
-        <% sliders.forEach(function(slide, index){ %>
-          <img src="<%= slide.imageUrl %>" class="<%= index === 0 ? 'active' : '' %>">
-        <% }) %>
+    <section class="hero glass home-hero-box">
+      <div class="slider-wrap">
+        <div class="slider" data-slider>
+          <% sliders.forEach(function(slide, index){ %>
+            <div class="slide <%= index === 0 ? 'active' : '' %>">
+              <img src="<%= slide.imageUrl %>" alt="<%= slide.title %>" />
+            </div>
+          <% }) %>
+        </div>
       </div>
 
-      <div class="hero-buttons">
-        <a href="<%= site.registerLink %>" class="btn gold">DAFTAR</a>
-        <a href="<%= site.loginLink %>" class="btn dark">LOGIN</a>
-        <a href="/prediksi" class="btn dark">PREDIKSI</a>
+      <div class="home-cta-row">
+        <a href="<%= site.loginLink %>" class="big-btn">LOGIN</a>
+        <a href="<%= site.registerLink %>" class="big-btn secondary">DAFTAR</a>
+        <a href="/prediksi" class="big-btn accent">PREDIKSI</a>
       </div>
     </section>
 
-    <div class="section-title">LIVE RESULT PASARAN</div>
+    <section class="market-grid-section">
+      <div class="section-title">Live Result Pasaran</div>
 
-    <div class="market-grid">
-      <% markets.forEach(function(market){ %>
-        <div class="market-card">
+      <div class="market-grid">
+        <% markets.forEach(function(market){ %>
+          <article class="market-card glass">
+            <img class="market-logo" src="<%= market.logoUrl %>" alt="<%= market.name %>" />
+            <h3><%= market.name %></h3>
 
-          <img class="market-logo" src="<%= market.logoUrl %>">
+            <div class="result-box">
+              <%= market.latestResult ? market.latestResult.prize1 : '----' %>
+            </div>
 
-          <h3><%= market.name %></h3>
+            <div class="result-date">
+              Result:
+              <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>
+            </div>
 
-          <div class="result-box">
-            <%= market.latestResult ? market.latestResult.prize1 : '----' %>
-          </div>
+            <div class="card-actions stacked">
+              <button
+                class="action-btn js-livedraw"
+                type="button"
+                data-name="<%= market.name %>"
+                data-logo="<%= market.logoUrl %>"
+                data-date="<%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>"
+                data-result="<%= market.latestResult ? market.latestResult.prize1 : '----' %>">
+                Livedraw
+              </button>
 
-          <div class="result-date">
-            <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>
-          </div>
-
-          <button class="action-btn js-livedraw"
-            data-name="<%= market.name %>"
-            data-logo="<%= market.logoUrl %>"
-            data-date="<%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>"
-            data-result="<%= market.latestResult ? market.latestResult.prize1 : '----' %>">
-            Livedraw
-          </button>
-
-          <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
-          <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
-
-        </div>
-      <% }) %>
-    </div>
-
+              <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
+              <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    </section>
   </main>
 
-  <div class="modal" id="livedrawModal">
-    <div class="modal-overlay"></div>
-    <div class="modal-card">
-      <img id="modalLogo" class="modal-logo">
-      <h3 id="modalTitle"></h3>
-      <div id="modalDate"></div>
+  <div class="modal" id="livedrawModal" aria-hidden="true">
+    <div class="modal-overlay" data-close-modal></div>
+
+    <div class="modal-card glass">
+      <button class="modal-close" type="button" data-close-modal>&times;</button>
+      <img id="modalLogo" class="modal-logo" src="" alt="" />
+      <h3 id="modalTitle">Livedraw</h3>
+      <p>Jadwal: Setiap Hari</p>
+      <div class="modal-date" id="modalDate"></div>
       <div class="modal-prize-row">
+        <span>Prize #1</span>
         <strong id="modalResult"></strong>
       </div>
+      <div class="modal-footer">Hasil Result Terkakhir</div>
     </div>
   </div>
 
