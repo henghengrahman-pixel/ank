@@ -227,17 +227,38 @@ function resultsPage(req, res) {
     };
   });
 
-  // Yang belum result di atas
   markets = markets.sort((a, b) => {
     if (a.hasTodayResult === b.hasTodayResult) return 0;
     return a.hasTodayResult ? 1 : -1;
+  });
+
+  const allHistory = [];
+
+  getMarkets().forEach((market) => {
+    const history = getResultHistoryByMarket(market.slug) || [];
+
+    history.forEach((item) => {
+      allHistory.push({
+        marketName: market.name,
+        marketSlug: market.slug,
+        marketLogoUrl: market.logoUrl,
+        ...item
+      });
+    });
+  });
+
+  allHistory.sort((a, b) => {
+    const byDate = new Date(b.date) - new Date(a.date);
+    if (byDate !== 0) return byDate;
+    return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
   });
 
   res.render('admin/results', {
     pageTitle: 'Result Pasaran',
     settings: getSettings(),
     markets,
-    today
+    today,
+    allHistory
   });
 }
 
