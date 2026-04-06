@@ -1,19 +1,42 @@
 const { getMarkets, getPredictionFile, readJson, writeJson } = require('./data');
 const { getTodayWIBDate } = require('./time');
 
-function rand(n) {
-  return Math.floor(Math.random() * n);
+function seededRandom(seed) {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
 }
 
-function randDigit() {
-  return Math.floor(Math.random() * 10);
+function randFromSeed(seed, max) {
+  return Math.floor(seededRandom(seed) * max);
 }
 
-function random4D() {
-  return String(rand(10000)).padStart(4, '0');
+function generateNumbers(seedBase) {
+  const angkaMain = String(randFromSeed(seedBase, 10000)).padStart(4, '0');
+
+  const top4d = Array.from({ length: 5 }, (_, i) =>
+    String(randFromSeed(seedBase + i + 1, 10000)).padStart(4, '0')
+  ).join(' ');
+
+  const top3d = Array.from({ length: 5 }, (_, i) =>
+    String(randFromSeed(seedBase + i + 10, 1000)).padStart(3, '0')
+  ).join(' ');
+
+  const top2d = Array.from({ length: 5 }, (_, i) =>
+    String(randFromSeed(seedBase + i + 20, 100)).padStart(2, '0')
+  ).join(' ');
+
+  const colokBebas = Array.from({ length: 3 }, (_, i) =>
+    randFromSeed(seedBase + i + 30, 10)
+  ).join(' ');
+
+  const colok2d = Array.from({ length: 3 }, (_, i) =>
+    String(randFromSeed(seedBase + i + 40, 100)).padStart(2, '0')
+  ).join(' ');
+
+  return { angkaMain, top4d, top3d, top2d, colokBebas, colok2d };
 }
 
-function getShioFromNumber(num) {
+function getShio(num) {
   const shioMap = {
     1: 'Kuda',
     2: 'Ular',
@@ -38,26 +61,22 @@ function getShioFromNumber(num) {
 }
 
 function generatePredictionForMarket(slug) {
-  const angkaMain = random4D();
+  const today = getTodayWIBDate().replace(/-/g, '');
+  const seedBase = Number(today) + slug.length * 100;
 
-  const top4d = Array.from({ length: 5 }, () => random4D()).join(' ');
-  const top3d = Array.from({ length: 5 }, () => String(rand(1000)).padStart(3, '0')).join(' ');
-  const top2d = Array.from({ length: 5 }, () => String(rand(100)).padStart(2, '0')).join(' ');
-  const colokBebas = Array.from({ length: 3 }, () => randDigit()).join(' ');
-  const colok2d = Array.from({ length: 3 }, () => String(rand(100)).padStart(2, '0')).join(' ');
+  const nums = generateNumbers(seedBase);
 
-  // shio dari angka main digit terakhir
-  const lastDigit = angkaMain[angkaMain.length - 1];
-  const shio = getShioFromNumber(lastDigit);
+  const lastDigit = nums.angkaMain.slice(-1);
+  const shio = getShio(lastDigit);
 
   return {
     date: getTodayWIBDate(),
-    angkaMain,
-    top4d,
-    top3d,
-    top2d,
-    colokBebas,
-    colok2d,
+    angkaMain: nums.angkaMain,
+    top4d: nums.top4d,
+    top3d: nums.top3d,
+    top2d: nums.top2d,
+    colokBebas: nums.colokBebas,
+    colok2d: nums.colok2d,
     shio,
     createdAt: new Date().toISOString()
   };
