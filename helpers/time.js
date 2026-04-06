@@ -1,7 +1,8 @@
 function getJakartaNow() {
   const now = new Date();
-  const jakarta = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
-  return jakarta;
+  return new Date(
+    now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+  );
 }
 
 function pad(value) {
@@ -15,8 +16,10 @@ function getTodayWIBDate() {
 
 function formatDisplayDate(input) {
   if (!input) return '-';
+
   const date = new Date(input);
   if (Number.isNaN(date.getTime())) return input;
+
   return date.toLocaleDateString('id-ID', {
     timeZone: 'Asia/Jakarta',
     weekday: 'long',
@@ -27,9 +30,20 @@ function formatDisplayDate(input) {
 }
 
 function getDayNameIndonesia(input) {
+  if (!input) return '-';
+
   const date = new Date(input);
   if (Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta', weekday: 'long' });
+
+  return date.toLocaleDateString('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    weekday: 'long'
+  });
 }
 
-module.exports = { getJakartaNow, getTodayWIBDate, formatDisplayDate, getDayNameIndonesia };
+module.exports = {
+  getJakartaNow,
+  getTodayWIBDate,
+  formatDisplayDate,
+  getDayNameIndonesia
+};
