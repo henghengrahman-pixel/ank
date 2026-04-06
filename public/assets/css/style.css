@@ -986,3 +986,44 @@ textarea {
     flex-direction: column;
   }
 }
+
+/* MODAL FIX */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+}
+
+.modal-card {
+  position: relative;
+  width: min(520px, calc(100% - 20px));
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  background: #111;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.modal-logo {
+  width: 120px;
+  margin: 0 auto 16px;
+}
+
+.modal-prize-row {
+  margin-top: 16px;
+  font-size: 28px;
+  font-weight: 900;
+}
