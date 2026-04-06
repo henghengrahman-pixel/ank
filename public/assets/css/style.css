@@ -1449,3 +1449,22 @@ header.glass {
     font-size: 24px;
   }
 }
+.admin-quick {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.quick-btn {
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg,#caa43b,#f5d77a);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.quick-btn:hover {
+  transform: translateY(-2px);
+}
