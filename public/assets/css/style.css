@@ -3082,3 +3082,62 @@ textarea {
     flex-direction: column;
   }
 }
+.history-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 5px;
+}
+
+.history-slide {
+  min-width: 260px;
+  flex: 0 0 auto;
+}
+
+.history-card-new {
+  background: #fff;
+  color: #111;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.history-card-new:hover {
+  transform: translateY(-6px);
+}
+
+.history-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.history-body {
+  padding: 12px;
+}
+
+.history-body h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.history-body p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.btn-history {
+  display: block;
+  text-align: center;
+  padding: 8px;
+  background: linear-gradient(180deg, #444, #111);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.btn-history:hover {
+  background: linear-gradient(180deg, #666, #000);
+}
