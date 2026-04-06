@@ -5,6 +5,7 @@
 
   <main class="container main-content">
 
+    <!-- HERO -->
     <section class="hero glass home-hero-box">
       <div class="slider-wrap">
         <div class="slider" data-slider>
@@ -23,6 +24,7 @@
       </div>
     </section>
 
+    <!-- DETAIL -->
     <section class="prediction-detail-clean glass">
       <a href="/prediksi" class="back-pill">← Beranda Prediksi</a>
 
@@ -75,26 +77,46 @@
       <% } %>
     </section>
 
+    <!-- HISTORY MODEL CARD -->
     <section class="history-strip glass">
       <h2 class="history-title">
-        PREDIKSI <%= market.name.toUpperCase() %> SEBELUMNYA
+        PREDIKSI <%= market.name.toUpperCase() %> SEBELUMNYA:
       </h2>
 
-      <div class="history-cards">
+      <div class="history-slider">
+
         <% if (history && history.length) { %>
           <% history.forEach(function(item){ %>
 
-            <a href="/prediksi/<%= market.slug %>?date=<%= item.date %>" class="history-card glass">
-              <img src="<%= market.logoUrl %>" />
-              <div class="history-date"><%= item.date %></div>
-              <strong class="history-number"><%= item.angkaMain %></strong>
-              <small class="history-shio"><%= item.shio %></small>
-            </a>
+            <div class="history-slide">
+              <div class="history-card-new">
+
+                <img src="<%= market.logoUrl %>" class="history-img" />
+
+                <div class="history-body">
+                  <h3>
+                    Prediksi <%= market.name %> 
+                    <%= formatDisplayDate(item.date) %>
+                  </h3>
+
+                  <p>
+                    Prediksi <%= market.name.toLowerCase() %> sebelumnya pada tanggal 
+                    <%= formatDisplayDate(item.date) %> di OMTOGEL.
+                  </p>
+
+                  <a href="/prediksi/<%= market.slug %>?date=<%= item.date %>" class="btn-history">
+                    👁 Lihat Prediksi
+                  </a>
+                </div>
+
+              </div>
+            </div>
 
           <% }) %>
         <% } else { %>
           <div class="empty-state">Belum ada history prediksi.</div>
         <% } %>
+
       </div>
     </section>
 
