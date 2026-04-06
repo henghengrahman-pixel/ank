@@ -1093,4 +1093,28 @@ textarea {
     margin: 0 auto;
   }
 }
+/* HEADER CLEAN */
+.topbar {
+  background: transparent;
+  padding: 12px 0;
+  border: none;
+  box-shadow: none;
+}
 
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand img {
+  height: 48px;
+  object-fit: contain;
+}
+
+/* HAPUS BAR HITAM */
+.promo-text,
+.wa-btn,
+.topbar-actions {
+  display: none;
+}
