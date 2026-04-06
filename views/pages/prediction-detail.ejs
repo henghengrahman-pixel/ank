@@ -3,110 +3,130 @@
 <div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
   <%- include('../partials/header') %>
 
-  <main class="container prediction-detail-page">
-    <section class="prediction-hero glass">
-      <div class="prediction-hero-top">
-        <a href="/prediksi" class="back-pill">← Kembali ke Prediksi</a>
-      </div>
-
-      <div class="prediction-hero-body">
-        <div class="prediction-hero-logo">
-          <img src="<%= market.logoUrl %>" alt="<%= market.name %>" class="detail-logo" />
-        </div>
-
-        <div class="prediction-hero-text">
-          <div class="prediction-badge">PREDIKSI HARI INI</div>
-          <h1><%= market.name %></h1>
-          <p class="prediction-subtitle">
-            Update prediksi terbaru untuk pasaran <strong><%= market.name %></strong>
-            tanggal <strong><%= current ? current.date : '-' %></strong>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <% if (current) { %>
-      <section class="prediction-main-grid">
-        <div class="prediction-main-left glass">
-          <div class="main-number-card">
-            <span class="main-number-label">Angka Main</span>
-            <strong class="main-number-value"><%= current.angkaMain %></strong>
-          </div>
-
-          <div class="prediction-detail-list premium">
-            <div class="detail-row card-row">
-              <span>Top 4D</span>
-              <strong><%= current.top4d %></strong>
-            </div>
-
-            <div class="detail-row card-row">
-              <span>Top 3D</span>
-              <strong><%= current.top3d %></strong>
-            </div>
-
-            <div class="detail-row card-row">
-              <span>Top 2D</span>
-              <strong><%= current.top2d %></strong>
-            </div>
-
-            <div class="detail-row card-row">
-              <span>Colok Bebas</span>
-              <strong><%= current.colokBebas %></strong>
-            </div>
-
-            <div class="detail-row card-row">
-              <span>Colok 2D</span>
-              <strong><%= current.colok2d %></strong>
-            </div>
-
-            <div class="detail-row card-row shio-row">
-              <span>Shio Jitu</span>
-              <strong><%= current.shio %></strong>
-            </div>
-          </div>
-        </div>
-
-        <aside class="prediction-main-right glass">
-          <div class="side-box">
-            <div class="side-label">Pasaran</div>
-            <div class="side-value"><%= market.name %></div>
-          </div>
-
-          <div class="side-box">
-            <div class="side-label">Tanggal</div>
-            <div class="side-value"><%= current.date %></div>
-          </div>
-
-          <div class="side-box">
-            <div class="side-label">Shio</div>
-            <div class="side-value accent"><%= current.shio %></div>
-          </div>
-        </aside>
-      </section>
-    <% } else { %>
-      <div class="empty-state glass">Prediksi belum tersedia.</div>
-    <% } %>
-
-    <section class="history-strip glass">
-      <div class="history-head">
-        <h2>History Prediksi</h2>
-        <span>14 hari terakhir</span>
-      </div>
-
-      <div class="history-cards">
-        <% if (history && history.length) { %>
-          <% history.forEach(function(item){ %>
-            <div class="history-card glass">
-              <div class="history-date"><%= item.date %></div>
-              <strong class="history-number"><%= item.angkaMain %></strong>
-              <small class="history-shio"><%= item.shio %></small>
+  <main class="container main-content">
+    <section class="hero glass home-hero-box">
+      <div class="slider-wrap">
+        <div class="slider" data-slider>
+          <% sliders.forEach(function(slide, index){ %>
+            <div class="slide <%= index === 0 ? 'active' : '' %>">
+              <img src="<%= slide.imageUrl %>" alt="<%= slide.title %>" />
             </div>
           <% }) %>
-        <% } else { %>
-          <div class="empty-state">Belum ada history prediksi.</div>
-        <% } %>
+        </div>
+      </div>
+
+      <div class="home-cta-row">
+        <a href="<%= site.loginLink %>" class="big-btn">LOGIN</a>
+        <a href="<%= site.registerLink %>" class="big-btn secondary">DAFTAR</a>
+        <a href="/prediksi" class="big-btn accent">PREDIKSI</a>
       </div>
     </section>
+
+    <div class="prediction-detail-page">
+      <section class="prediction-hero glass">
+        <div class="prediction-hero-top">
+          <a href="/prediksi" class="back-pill">← Beranda Prediksi</a>
+        </div>
+
+        <div class="prediction-hero-body">
+          <div class="prediction-hero-logo">
+            <img src="<%= market.logoUrl %>" alt="<%= market.name %>" class="detail-logo" />
+          </div>
+
+          <div class="prediction-hero-text">
+            <div class="prediction-badge">PREDIKSI HARI INI</div>
+            <h1><%= market.name %></h1>
+            <p class="prediction-subtitle">
+              Update prediksi terbaru untuk pasaran <strong><%= market.name %></strong>
+              tanggal <strong><%= current ? current.date : '-' %></strong>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <% if (current) { %>
+        <section class="prediction-main-grid">
+          <div class="prediction-main-left glass">
+            <div class="main-number-card">
+              <span class="main-number-label">Angka Main</span>
+              <strong class="main-number-value"><%= current.angkaMain %></strong>
+            </div>
+
+            <div class="prediction-detail-list premium">
+              <div class="detail-row card-row">
+                <span>Top 4D</span>
+                <strong><%= current.top4d %></strong>
+              </div>
+
+              <div class="detail-row card-row">
+                <span>Top 3D</span>
+                <strong><%= current.top3d %></strong>
+              </div>
+
+              <div class="detail-row card-row">
+                <span>Top 2D</span>
+                <strong><%= current.top2d %></strong>
+              </div>
+
+              <div class="detail-row card-row">
+                <span>Colok Bebas</span>
+                <strong><%= current.colokBebas %></strong>
+              </div>
+
+              <div class="detail-row card-row">
+                <span>Colok 2D</span>
+                <strong><%= current.colok2d %></strong>
+              </div>
+
+              <div class="detail-row card-row shio-row">
+                <span>Shio Jitu</span>
+                <strong><%= current.shio %></strong>
+              </div>
+            </div>
+          </div>
+
+          <aside class="prediction-main-right glass">
+            <div class="side-box">
+              <div class="side-label">Pasaran</div>
+              <div class="side-value"><%= market.name %></div>
+            </div>
+
+            <div class="side-box">
+              <div class="side-label">Tanggal</div>
+              <div class="side-value"><%= current ? current.date : '-' %></div>
+            </div>
+
+            <div class="side-box">
+              <div class="side-label">Shio</div>
+              <div class="side-value accent"><%= current ? current.shio : '-' %></div>
+            </div>
+          </aside>
+        </section>
+      <% } else { %>
+        <div class="empty-state glass">Prediksi belum tersedia.</div>
+      <% } %>
+
+      <section class="history-strip glass">
+        <div class="history-head">
+          <h2>History Prediksi</h2>
+          <span>14 hari terakhir</span>
+        </div>
+
+        <div class="history-cards">
+          <% if (history && history.length) { %>
+            <% history.forEach(function(item){ %>
+              <div class="history-card glass">
+                <div class="history-date"><%= item.date %></div>
+                <strong class="history-number"><%= item.angkaMain %></strong>
+                <small class="history-shio"><%= item.shio %></small>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="empty-state">Belum ada history prediksi.</div>
+          <% } %>
+        </div>
+      </section>
+    </div>
   </main>
 
   <%- include('../partials/footer') %>
