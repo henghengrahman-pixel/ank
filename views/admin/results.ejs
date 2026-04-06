@@ -28,7 +28,7 @@
                   name="prize1"
                   maxlength="4"
                   placeholder="XXXX"
-                  value="<%= market.currentResult ? market.currentResult.prize1 : '' %>"
+                  value="<%= market.currentResult && market.currentResult.prize1 ? market.currentResult.prize1 : '' %>"
                   required
                 />
               </div>
@@ -37,7 +37,7 @@
                 <input
                   type="date"
                   name="date"
-                  value="<%= market.currentResult ? market.currentResult.date : today %>"
+                  value="<%= market.currentResult && market.currentResult.date ? market.currentResult.date : today %>"
                   required
                 />
               </div>
@@ -46,7 +46,7 @@
                 <input
                   type="text"
                   name="resultTime"
-                  value="<%= market.currentResult ? market.currentResult.resultTime : (market.resultTime || '') %>"
+                  value="<%= market.currentResult && market.currentResult.resultTime ? market.currentResult.resultTime : (market.resultTime || '') %>"
                   placeholder="03:00"
                   required
                 />
@@ -56,37 +56,52 @@
                 <button class="action-btn" type="submit">Simpan Result</button>
               </div>
             </form>
-
-            <div class="admin-table result-history-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Hari</th>
-                    <th>Tanggal</th>
-                    <th>Prize 1</th>
-                    <th>Jam</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% if (market.history && market.history.length) { %>
-                    <% market.history.forEach(function(item){ %>
-                      <tr>
-                        <td><%= item.dayName %></td>
-                        <td><%= item.date %></td>
-                        <td><strong><%= item.prize1 %></strong></td>
-                        <td><%= item.resultTime %></td>
-                      </tr>
-                    <% }) %>
-                  <% } else { %>
-                    <tr>
-                      <td colspan="4">Belum ada history.</td>
-                    </tr>
-                  <% } %>
-                </tbody>
-              </table>
-            </div>
           </div>
         <% }) %>
+      </div>
+    </section>
+
+    <section class="admin-section glass">
+      <h2>History Result</h2>
+
+      <div class="admin-table result-history-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Pasaran</th>
+              <th>Hari</th>
+              <th>Tanggal</th>
+              <th>Prize 1</th>
+              <th>Jam</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (allHistory && allHistory.length) { %>
+              <% allHistory.forEach(function(item){ %>
+                <tr>
+                  <td>
+                    <div class="history-market-cell">
+                      <img
+                        src="<%= item.marketLogoUrl || 'https://dummyimage.com/60x30/111/fff&text=LOGO' %>"
+                        alt="<%= item.marketName %>"
+                        class="history-market-logo"
+                      />
+                      <span><%= item.marketName %></span>
+                    </div>
+                  </td>
+                  <td><%= item.dayName %></td>
+                  <td><%= item.date %></td>
+                  <td><strong><%= item.prize1 %></strong></td>
+                  <td><%= item.resultTime %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="5">Belum ada history.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
