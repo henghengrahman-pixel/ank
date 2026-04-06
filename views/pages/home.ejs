@@ -1,6 +1,8 @@
 <%- include('../partials/head') %>
-<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>'); --bg-left:url('<%= site.backgroundLeft %>'); --bg-right:url('<%= site.backgroundRight %>');">
+
+<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
   <%- include('../partials/header') %>
+
   <main class="container main-content">
     <section class="hero glass">
       <div class="slider" data-slider>
@@ -10,6 +12,7 @@
           </div>
         <% }) %>
       </div>
+
       <div class="cta-row">
         <a href="<%= site.loginLink %>" class="big-btn">LOGIN</a>
         <a href="<%= site.registerLink %>" class="big-btn secondary">DAFTAR</a>
@@ -18,14 +21,22 @@
 
     <section class="market-grid-section">
       <div class="section-title">Live Result Pasaran</div>
+
       <div class="market-grid">
         <% markets.forEach(function(market){ %>
           <article class="market-card glass">
-            <button class="info-dot" type="button">i</button>
             <img class="market-logo" src="<%= market.logoUrl %>" alt="<%= market.name %>" />
             <h3><%= market.name %></h3>
-            <div class="result-box"><%= market.latestResult ? market.latestResult.prize1 : '----' %></div>
-            <div class="result-date">Result: <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %></div>
+
+            <div class="result-box">
+              <%= market.latestResult ? market.latestResult.prize1 : '----' %>
+            </div>
+
+            <div class="result-date">
+              Result:
+              <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>
+            </div>
+
             <div class="card-actions stacked">
               <button
                 class="action-btn js-livedraw"
@@ -36,6 +47,7 @@
                 data-result="<%= market.latestResult ? market.latestResult.prize1 : '----' %>">
                 Livedraw
               </button>
+
               <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
               <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
             </div>
@@ -44,17 +56,24 @@
       </div>
     </section>
   </main>
+
   <div class="modal" id="livedrawModal" aria-hidden="true">
     <div class="modal-overlay" data-close-modal></div>
+
     <div class="modal-card glass">
       <button class="modal-close" type="button" data-close-modal>&times;</button>
+
       <img id="modalLogo" class="modal-logo" src="" alt="" />
       <h3 id="modalTitle">Livedraw</h3>
       <p>Jadwal: Setiap Hari</p>
       <div class="modal-date" id="modalDate"></div>
-      <div class="modal-prize-row"><span>Prize #1</span><strong id="modalResult"></strong></div>
-      <div class="modal-footer">Result terakhir tersimpan otomatis dari admin panel</div>
+      <div class="modal-prize-row">
+        <span>Prize #1</span>
+        <strong id="modalResult"></strong>
+      </div>
+      <div class="modal-footer">Result terakhir tersimpan dari sistem</div>
     </div>
   </div>
+
   <%- include('../partials/footer') %>
 </div>
