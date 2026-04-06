@@ -1,93 +1,68 @@
 <%- include('../partials/head') %>
 
-<div class="site-shell" style="--bg-main:url('<%= site.backgroundMain %>');">
+<div class="site-shell">
   <%- include('../partials/header') %>
 
   <main class="container main-content">
 
-    <!-- HERO WD STYLE -->
     <section class="hero-modern">
-
-      <!-- SLIDER -->
       <div class="hero-banner">
         <% sliders.forEach(function(slide, index){ %>
-          <img 
-            src="<%= slide.imageUrl %>" 
-            alt="<%= slide.title %>" 
-            class="<%= index === 0 ? 'active' : '' %>"
-          />
+          <img src="<%= slide.imageUrl %>" class="<%= index === 0 ? 'active' : '' %>">
         <% }) %>
       </div>
 
-      <!-- BUTTON -->
       <div class="hero-buttons">
         <a href="<%= site.registerLink %>" class="btn gold">DAFTAR</a>
         <a href="<%= site.loginLink %>" class="btn dark">LOGIN</a>
         <a href="/prediksi" class="btn dark">PREDIKSI</a>
       </div>
-
     </section>
 
-    <!-- RESULT -->
-    <section class="market-grid-section">
-      <div class="section-title">LIVE RESULT PASARAN</div>
+    <div class="section-title">LIVE RESULT PASARAN</div>
 
-      <div class="market-grid">
-        <% markets.forEach(function(market){ %>
-          <article class="market-card">
+    <div class="market-grid">
+      <% markets.forEach(function(market){ %>
+        <div class="market-card">
 
-            <img class="market-logo" src="<%= market.logoUrl %>" alt="<%= market.name %>" />
+          <img class="market-logo" src="<%= market.logoUrl %>">
 
-            <h3><%= market.name %></h3>
+          <h3><%= market.name %></h3>
 
-            <div class="result-box">
-              <%= market.latestResult ? market.latestResult.prize1 : '----' %>
-            </div>
+          <div class="result-box">
+            <%= market.latestResult ? market.latestResult.prize1 : '----' %>
+          </div>
 
-            <div class="result-date">
-              Result:
-              <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>
-            </div>
+          <div class="result-date">
+            <%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>
+          </div>
 
-            <div class="card-actions stacked">
+          <button class="action-btn js-livedraw"
+            data-name="<%= market.name %>"
+            data-logo="<%= market.logoUrl %>"
+            data-date="<%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>"
+            data-result="<%= market.latestResult ? market.latestResult.prize1 : '----' %>">
+            Livedraw
+          </button>
 
-              <button
-                class="action-btn js-livedraw"
-                type="button"
-                data-name="<%= market.name %>"
-                data-logo="<%= market.logoUrl %>"
-                data-date="<%= market.latestResult ? formatDisplayDate(market.latestResult.date) : '-' %>"
-                data-result="<%= market.latestResult ? market.latestResult.prize1 : '----' %>">
-                Livedraw
-              </button>
+          <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
+          <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
 
-              <a class="action-btn" href="/prediksi/<%= market.slug %>">Prediksi</a>
-              <a class="action-btn" href="/result/<%= market.slug %>">Result</a>
-
-            </div>
-
-          </article>
-        <% }) %>
-      </div>
-    </section>
+        </div>
+      <% }) %>
+    </div>
 
   </main>
 
-  <!-- MODAL -->
-  <div class="modal" id="livedrawModal" aria-hidden="true">
-    <div class="modal-overlay" data-close-modal></div>
-
+  <div class="modal" id="livedrawModal">
+    <div class="modal-overlay"></div>
     <div class="modal-card">
-      <button class="modal-close" type="button" data-close-modal>&times;</button>
-      <img id="modalLogo" class="modal-logo" src="" alt="" />
-      <h3 id="modalTitle">Livedraw</h3>
-      <p>Jadwal: Setiap Hari</p>
-      <div class="modal-date" id="modalDate"></div>
+      <img id="modalLogo" class="modal-logo">
+      <h3 id="modalTitle"></h3>
+      <div id="modalDate"></div>
       <div class="modal-prize-row">
-        <span>Prize #1</span>
         <strong id="modalResult"></strong>
       </div>
-      <div class="modal-footer">Hasil Result Terakhir</div>
     </div>
   </div>
 
