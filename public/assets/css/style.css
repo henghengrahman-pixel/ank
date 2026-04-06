@@ -3288,3 +3288,61 @@ textarea {
 .slide.active {
   opacity: 1;
 }
+.home-hero-box {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(10,10,10,0.85);
+  border: 1px solid rgba(255,215,0,0.12);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+  max-width: 700px;
+  margin: auto;
+}
+
+/* BANNER */
+.slider img {
+  width: 100%;
+  height: 150px; /* 🔥 kecilin biar ga makan tempat */
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* BUTTON WRAP */
+.home-cta-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTON BASE */
+.big-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+/* LOGIN & DAFTAR */
+.big-btn,
+.big-btn.secondary {
+  background: linear-gradient(180deg, #2a2a2a, #111);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* PREDIKSI FIX */
+.big-btn.accent {
+  flex: 100%;
+  margin-top: 10px;
+  background: linear-gradient(180deg, #e6b800, #a67c00); /* 🔥 lebih kalem */
+  color: #000;
+  font-weight: 700;
+}
+
+/* HOVER SIMPLE */
+.big-btn:hover {
+  opacity: 0.9;
+}
