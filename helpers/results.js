@@ -10,38 +10,38 @@ const {
 const { getTodayWIBDate, getDayNameIndonesia } = require('./time');
 
 function normalizePrize1(value) {
-  const cleaned = String(value || '').replace(/\D/g, '').slice(0, 4);
-  return cleaned;
+  return String(value || '').replace(/\D/g, '').slice(0, 4);
 }
 
 function readResultPayload(slug) {
   const file = getResultsFile(slug);
-  const payload = readJson(file, { current: null, history: [], latest: null });
+  const payload = readJson(file, { current: null, latest: null, history: [] });
 
   return {
     current: payload && typeof payload === 'object' ? payload.current || null : null,
-    history: payload && Array.isArray(payload.history) ? payload.history : [],
-    latest: payload && typeof payload === 'object' ? payload.latest || null : null
+    latest: payload && typeof payload === 'object' ? payload.latest || null : null,
+    history: payload && Array.isArray(payload.history) ? payload.history : []
   };
 }
 
 function writeResultPayload(slug, payload) {
   const file = getResultsFile(slug);
+
   writeJson(file, {
     current: payload.current || null,
-    history: Array.isArray(payload.history) ? payload.history.slice(0, 14) : [],
-    latest: payload.latest || null
+    latest: payload.latest || null,
+    history: Array.isArray(payload.history) ? payload.history.slice(0, 14) : []
   });
 }
 
 function getLatestResultByMarket(slug) {
   const payload = readResultPayload(slug);
+  return payload.latest || payload.current || null;
+}
 
-  if (payload.latest) return payload.latest;
-  if (payload.current) return payload.current;
-  if (payload.history.length) return payload.history[0];
-
-  return null;
+function getCurrentResultByMarket(slug) {
+  const payload = readResultPayload(slug);
+  return payload.current || payload.latest || null;
 }
 
 function getResultHistoryByMarket(slug) {
@@ -49,31 +49,30 @@ function getResultHistoryByMarket(slug) {
   return Array.isArray(payload.history) ? payload.history : [];
 }
 
-function getCurrentResultByMarket(slug) {
-  const payload = readResultPayload(slug);
-  return payload.current || null;
-}
-
 function saveDailyResult(slug, payload) {
+  const resultPayload = readResultPayload(slug);
   const date = payload.date || getTodayWIBDate();
-  const resultValue = normalizePrize1(payload.prize1);
+  const prize1 = normalizePrize1(payload.prize1);
 
   const entry = {
     id: payload.id || `${slug}-${date}`,
     date,
     dayName: payload.dayName || getDayNameIndonesia(date),
-    prize1: resultValue,
+    prize1,
     resultTime: payload.resultTime || '00:00',
     createdAt: new Date().toISOString()
   };
 
-  const resultPayload = readResultPayload(slug);
-
-  resultPayload.current = entry;
-  resultPayload.latest = entry;
+  if (date === getTodayWIBDate()) {
+    resultPayload.current = entry;
+    resultPayload.latest = entry;
+  } else {
+    resultPayload.history = resultPayload.history.filter((item) => item.date !== date);
+    resultPayload.history.unshift(entry);
+    resultPayload.history = resultPayload.history.slice(0, 14);
+  }
 
   writeResultPayload(slug, resultPayload);
-
   return entry;
 }
 
