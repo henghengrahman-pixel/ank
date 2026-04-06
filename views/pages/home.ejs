@@ -5,17 +5,20 @@
 
   <main class="container main-content">
     <section class="hero glass">
-      <div class="slider" data-slider>
-        <% sliders.forEach(function(slide, index){ %>
-          <div class="slide <%= index === 0 ? 'active' : '' %>">
-            <img src="<%= slide.imageUrl %>" alt="<%= slide.title %>" />
-          </div>
-        <% }) %>
+      <div class="slider-wrap">
+        <div class="slider" data-slider>
+          <% sliders.forEach(function(slide, index){ %>
+            <div class="slide <%= index === 0 ? 'active' : '' %>">
+              <img src="<%= slide.imageUrl %>" alt="<%= slide.title %>" />
+            </div>
+          <% }) %>
+        </div>
       </div>
 
-      <div class="cta-row">
+      <div class="home-cta-row">
         <a href="<%= site.loginLink %>" class="big-btn">LOGIN</a>
         <a href="<%= site.registerLink %>" class="big-btn secondary">DAFTAR</a>
+        <a href="/prediksi" class="big-btn accent">PREDIKSI</a>
       </div>
     </section>
 
@@ -62,7 +65,6 @@
 
     <div class="modal-card glass">
       <button class="modal-close" type="button" data-close-modal>&times;</button>
-
       <img id="modalLogo" class="modal-logo" src="" alt="" />
       <h3 id="modalTitle">Livedraw</h3>
       <p>Jadwal: Setiap Hari</p>
