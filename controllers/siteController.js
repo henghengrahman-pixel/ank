@@ -42,6 +42,7 @@ function home(req, res) {
 
 function predictions(req, res) {
   const predictionsMap = getPredictionsMap();
+  const sliders = getSliders().filter((item) => item.active !== false);
 
   const markets = getMarkets().map((market) => {
     const predictionPayload = predictionsMap[market.slug] || {
@@ -58,6 +59,7 @@ function predictions(req, res) {
   res.render('pages/predictions', {
     pageTitle: 'Prediksi',
     settings: getSettings(),
+    sliders,
     markets,
     today: getTodayWIBDate(),
     formatDisplayDate
@@ -75,6 +77,7 @@ function predictionDetail(req, res) {
   }
 
   const predictionsMap = getPredictionsMap();
+  const sliders = getSliders().filter((item) => item.active !== false);
   const predictionPayload = predictionsMap[market.slug] || {
     current: null,
     history: []
@@ -83,6 +86,7 @@ function predictionDetail(req, res) {
   res.render('pages/prediction-detail', {
     pageTitle: `Prediksi ${market.name}`,
     settings: getSettings(),
+    sliders,
     market,
     current: predictionPayload.current || null,
     history: Array.isArray(predictionPayload.history) ? predictionPayload.history : [],
