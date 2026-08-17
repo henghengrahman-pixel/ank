@@ -1,0 +1,134 @@
+<%- include('../partials/head') %>
+
+<div class="admin-layout">
+  <%- include('../partials/admin-nav') %>
+
+  <main class="admin-main">
+    <section class="admin-section glass">
+      <h1>AUTO Result</h1>
+      <form method="POST" action="/admin/results/auto-settings" class="admin-form grid-3">
+        <label><input type="checkbox" name="enabled" <%= autoResult.enabled === true ? 'checked' : '' %> /> AUTO Result ON</label>
+        <input name="sourceUrl" value="<%= autoResult.sourceUrl || '' %>" placeholder="https://wdbandarplus.com/" required />
+        <input type="number" name="intervalSeconds" min="10" max="3600" value="<%= autoResult.intervalSeconds || 30 %>" placeholder="Interval detik" />
+        <input type="number" name="timeoutMs" min="5000" max="60000" value="<%= autoResult.timeoutMs || 15000 %>" placeholder="Timeout ms" />
+        <button class="action-btn" type="submit">Simpan Pengaturan AUTO</button>
+        <textarea name="fallbackUrls" rows="3" style="grid-column:1/-1;width:100%" placeholder="URL cadangan (opsional), satu per baris. Dipakai otomatis jika URL utama 403/429/error."><%= autoResult.fallbackUrls || '' %></textarea>
+      </form>
+      <form method="POST" action="/admin/results/scan-now" style="margin-top:12px">
+        <button class="action-btn" type="submit">Scan Sekarang</button>
+      </form>
+      <div style="margin-top:12px">
+        <strong>Status:</strong> <%= autoStatus.ok ? 'OK' : (autoStatus.error ? 'ERROR' : 'Belum scan') %> |
+        <strong>Parser:</strong> <%= autoStatus.sourceType || '-' %> |
+        <strong>Ditemukan:</strong> <%= autoStatus.found || 0 %> |
+        <strong>Match:</strong> <%= autoStatus.matched || 0 %> |
+        <strong>Tersimpan:</strong> <%= autoStatus.saved || 0 %>
+        <% if (autoStatus.usedSourceUrl) { %> | <strong>Sumber dipakai:</strong> <%= autoStatus.usedSourceUrl %><% } %>
+        <% if (autoStatus.error) { %><div style="color:#ff7777;margin-top:8px"><%= autoStatus.error %></div><% } %>
+      </div>
+    </section>
+
+    <section class="admin-section glass">
+      <h1>Result Pasaran</h1>
+
+      <div class="result-admin-list">
+        <% markets.forEach(function(market){ %>
+          <div class="result-admin-row glass">
+            <div class="result-admin-market">
+              <img
+                src="<%= market.logoUrl || 'https://dummyimage.com/80x40/111/fff&text=LOGO' %>"
+                alt="<%= market.name %>"
+                class="result-admin-logo"
+              />
+              <div class="result-admin-name"><%= market.name %></div>
+            </div>
+
+            <form method="POST" action="/admin/results" class="result-admin-form">
+              <input type="hidden" name="slug" value="<%= market.slug %>" />
+
+              <div class="result-admin-input">
+                <input
+                  type="text"
+                  name="prize1"
+                  maxlength="5"
+                  placeholder="XXXXX"
+                  value="<%= market.currentResult && market.currentResult.prize1 ? market.currentResult.prize1 : '' %>"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-date">
+                <input
+                  type="date"
+                  name="date"
+                  value="<%= market.currentResult && market.currentResult.date ? market.currentResult.date : today %>"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-time">
+                <input
+                  type="text"
+                  name="resultTime"
+                  value="<%= market.currentResult && market.currentResult.resultTime ? market.currentResult.resultTime : (market.resultTime || '') %>"
+                  placeholder="03:00"
+                  required
+                />
+              </div>
+
+              <div class="result-admin-action">
+                <button class="action-btn" type="submit">Simpan Result</button>
+              </div>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <section class="admin-section glass">
+      <h2>History Result</h2>
+
+      <div class="admin-table result-history-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Pasaran</th>
+              <th>Hari</th>
+              <th>Tanggal</th>
+              <th>Prize 1</th>
+              <th>Jam</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (allHistory && allHistory.length) { %>
+              <% allHistory.forEach(function(item){ %>
+                <tr>
+                  <td>
+                    <div class="history-market-cell">
+                      <img
+                        src="<%= item.marketLogoUrl || 'https://dummyimage.com/60x30/111/fff&text=LOGO' %>"
+                        alt="<%= item.marketName %>"
+                        class="history-market-logo"
+                      />
+                      <span><%= item.marketName %></span>
+                    </div>
+                  </td>
+                  <td><%= item.dayName %></td>
+                  <td><%= item.date %></td>
+                  <td><strong><%= item.prize1 %></strong></td>
+                  <td><%= item.resultTime %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="5">Belum ada history.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
